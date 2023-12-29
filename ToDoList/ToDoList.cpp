@@ -1,20 +1,55 @@
-﻿// ToDoList.cpp : Ten plik zawiera funkcję „main”. W nim rozpoczyna się i kończy wykonywanie programu.
-//
+﻿#include <iostream>
 
-#include <iostream>
+
+class Task {
+
+    std::string Name;
+    std::string DateBeg;
+    std::string DateEnd;
+    std::string Description;
+    bool isDone = false;
+
+
+public:Task() {
+
+}
+
+
+
+public: void AddTask() {
+
+    }
+
+public:void DelTask() {
+
+}
+public:void SetTaskDone() {
+    isDone = true;
+}
+
+public:void ShowTasks() {
+
+}
+
+
+
+};
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    Task myTask;
+
+
+    std::cout << "1.Dodaj Zadanie\n";
+    std::cout << "2.Usuń Zadanie\n";
+    std::cout << "3.Zobacz swoje zadania Zadanie\n";
+    std::cout << "4.Oznacz zadanie jako wykonane\n";
+    std::cout << "5.Wyjdź\n";
 }
 
-// Uruchomienie programu: Ctrl + F5 lub menu Debugowanie > Uruchom bez debugowania
-// Debugowanie programu: F5 lub menu Debugowanie > Rozpocznij debugowanie
 
-// Porady dotyczące rozpoczynania pracy:
-//   1. Użyj okna Eksploratora rozwiązań, aby dodać pliki i zarządzać nimi
-//   2. Użyj okna programu Team Explorer, aby nawiązać połączenie z kontrolą źródła
-//   3. Użyj okna Dane wyjściowe, aby sprawdzić dane wyjściowe kompilacji i inne komunikaty
-//   4. Użyj okna Lista błędów, aby zobaczyć błędy
-//   5. Wybierz pozycję Projekt > Dodaj nowy element, aby utworzyć nowe pliki kodu, lub wybierz pozycję Projekt > Dodaj istniejący element, aby dodać istniejące pliku kodu do projektu
-//   6. Aby w przyszłości ponownie otworzyć ten projekt, przejdź do pozycji Plik > Otwórz > Projekt i wybierz plik sln
+/*
+Napisz rozbudowaną aplikację do zarządzania listą zadań (To-Do List). Aplikacja powinna umożliwiać użytkownikowi dodawanie,
+usuwanie i oznaczanie zadań jako ukończone. Wykorzystaj klasy i struktury do reprezentowania zadań 
+oraz zastosuj operacje na plikach do zapisywania i wczytywania listy zadań.
+*/
