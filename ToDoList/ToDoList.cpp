@@ -1,5 +1,5 @@
 ﻿#include <iostream>
-
+#include <fstream>
 
 class Task {
 
@@ -11,7 +11,7 @@ class Task {
 
 
 public:Task() {
-
+    std::ofstream MyFile("Tasks.txt");
 }
 
 
@@ -35,16 +35,24 @@ public:void ShowTasks() {
 
 };
 
+
+void ShowMenu() {
+        std::cout << "1.Dodaj Zadanie\n";
+        std::cout << "2.Usuń Zadanie\n";
+        std::cout << "3.Zobacz swoje zadania Zadanie\n";
+        std::cout << "4.Oznacz zadanie jako wykonane\n";
+        std::cout << "5.Wyjdź\n";
+}
+
+
 int main()
 {
     Task myTask;
+    ShowMenu();
 
 
-    std::cout << "1.Dodaj Zadanie\n";
-    std::cout << "2.Usuń Zadanie\n";
-    std::cout << "3.Zobacz swoje zadania Zadanie\n";
-    std::cout << "4.Oznacz zadanie jako wykonane\n";
-    std::cout << "5.Wyjdź\n";
+
+  
 }
 
 
