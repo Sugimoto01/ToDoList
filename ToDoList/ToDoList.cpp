@@ -142,16 +142,13 @@ Na początku program musi sprawdzić czy plik z listą isnieje jeżeli tak to go
 a gdy nie ma takiego pliku to go stworzyć
 
 
-funkcja dodaj zadanie będzie dodawać tekst do pliku
+
 
 funkcja usuń zadanie będzie musiała usunąć całą linie bo na każde zadanie przysługuje 1 linia
-
-funkcja zobacz zadanie wyświetli zawartość pliku
 
 funkcja oznacz zadanie jako wykonane doda na końcu tekstu w lini ptazska
 
 
-problem po ponownym uruchomieniu programu nadpisuję on to co już było poprzednio
 
 
 */

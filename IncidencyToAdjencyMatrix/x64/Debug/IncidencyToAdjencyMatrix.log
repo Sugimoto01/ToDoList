@@ -1,0 +1,5 @@
+﻿  IncidencyToAdjencyMatrix.cpp
+E:\ToDoList\ToDoList\IncidencyToAdjencyMatrix\IncidencyToAdjencyMatrix.cpp(22,11): warning C4267: "inicjowanie": konwersja z "size_t" do "int", możliwa utrata danych
+E:\ToDoList\ToDoList\IncidencyToAdjencyMatrix\IncidencyToAdjencyMatrix.cpp(63,11): warning C4267: "inicjowanie": konwersja z "size_t" do "int", możliwa utrata danych
+E:\ToDoList\ToDoList\IncidencyToAdjencyMatrix\IncidencyToAdjencyMatrix.cpp(64,11): warning C4267: "inicjowanie": konwersja z "size_t" do "int", możliwa utrata danych
+  IncidencyToAdjencyMatrix.vcxproj -> E:\ToDoList\ToDoList\IncidencyToAdjencyMatrix\x64\Debug\IncidencyToAdjencyMatrix.exe
