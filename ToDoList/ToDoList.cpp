@@ -4,6 +4,7 @@
 #include <chrono>
 #include <vector>
 #include <limits>
+#include <regex>
 
 
 
@@ -23,19 +24,39 @@ public:
     Task() : id(""), Name(""), DateBeg(""), DateEnd(""), Description(""), isDone(false) {}
 
 
-
+public: bool checkDate(const std::string& data) {
+    std::regex wzorzec("^\\d{2}-\\d{2}-\\d{4}$");
+    return std::regex_match(data, wzorzec);
+}
 public: void AddTask() {
     std::ofstream MyFile("Tasks.txt", std::ios::app);
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     std::cout << "Wpisz nazwe zadania : ";
     std::getline(std::cin, Name);
+    if (!Name.empty())
+    {
+       
+    }
+    else  std::cout << "Nazwa zadania jest niepoprawna. Spróbuj ponownie." << std::endl;
     std::cout << "Wpisz Date rozpoczecia: : ";
     std::getline(std::cin, DateBeg);
+    if (checkDate(DateBeg)) {
+
+    }else std::cout << "Data jest w niepoprawnym formacie. Użyj formatu DD-MM-YYYY.\n";
     std::cout << "Wpisz Date zakonczenia: : ";
     std::getline(std::cin, DateEnd);
+    if (checkDate(DateEnd)) {
+
+    }
+    else std::cout << "Data jest w niepoprawnym formacie. Użyj formatu DD-MM-YYYY.\n";
     std::cout << "Dodaj opis zadania: ";
     std::getline(std::cin, Description);
+    if (!Name.empty())
+    {
+
+    }
+    else  std::cout << "Opis Zadania nie może być pusty" << std::endl;
 
 
     if (MyFile.is_open()) {
@@ -116,25 +137,25 @@ int main()
 
         std::cout << "Co chcesz zrobić:";
         if (std::cin >> choose) {
-            break;
+              
+            switch (choose)
+                {
+                case 1: myTask.AddTask(); break;
+                case 2: myTask.DelTask(); break;
+                case 3: myTask.ShowTasks(); break;
+                case 4: myTask.SetTaskDone(); break;
+                case 5: return 0; break;
+                default:std::cout << "Nieprawidlowy wybor."; return 0;
+                    break;
+                }
         }
         else {
-            std::cout << "To nie jest liczba całkowita. Spróbuj ponownie.\n";
-            std::cin.clear(); // Czyścimy błąd strumienia.
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorujemy błędne dane do końca linii.
+            std::cout << "Nieprawidłowe dane spróbuj jeszcze raz";
+            ShowMenu();
         }
-        
 
-        switch (choose)
-        {
-        case 1: myTask.AddTask(); break;
-        case 2: myTask.DelTask(); break;
-        case 3: myTask.ShowTasks(); break;
-        case 4: myTask.SetTaskDone(); break;
-        case 5: return 0; break;
-        default:std::cout << "Nieprawidlowy wybor."; return 0;
-            break;
-        }
+
+     
 
     }
    
