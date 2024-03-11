@@ -3,23 +3,24 @@
 #include <string>
 #include <chrono>
 #include <vector>
+#include <limits>
 
 
 
 const auto TimeStamp = std::chrono::system_clock::now(); // create time stamp of actual time from system
 
 class Task {
-
-    std::string Name;
+private:
+    std::string id;
+    std::string  Name;
     std::string DateBeg;
     std::string DateEnd;
     std::string Description;
-    bool isDone = false;
+    bool isDone;
 
 
-public:Task() {
-    
-}
+public:
+    Task() : id(""), Name(""), DateBeg(""), DateEnd(""), Description(""), isDone(false) {}
 
 
 
@@ -27,13 +28,18 @@ public: void AddTask() {
     std::ofstream MyFile("Tasks.txt", std::ios::app);
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    std::cout << "Wpisz tekst: ";
+    std::cout << "Wpisz nazwe zadania : ";
+    std::getline(std::cin, Name);
+    std::cout << "Wpisz Date rozpoczecia: : ";
+    std::getline(std::cin, DateBeg);
+    std::cout << "Wpisz Date zakonczenia: : ";
+    std::getline(std::cin, DateEnd);
+    std::cout << "Dodaj opis zadania: ";
     std::getline(std::cin, Description);
 
 
-
     if (MyFile.is_open()) {
-        MyFile << Description << " " << std::chrono::duration_cast<std::chrono::seconds>(TimeStamp.time_since_epoch()).count() << std::endl;
+        MyFile << Name <<" " << DateBeg << " " << DateEnd<<" " << Description << " " << std::chrono::duration_cast<std::chrono::seconds>(TimeStamp.time_since_epoch()).count() << std::endl;
         MyFile.close();
     }
     else std::cerr << "Error opening file!" << std::endl;
@@ -52,9 +58,9 @@ public:void DelTask() {
 
         std::string line;
         while (getline(Myfile, line)) {
-            // Check if the current line should be deleted
+          
             if (std::find(linesToDelete.begin(), linesToDelete.end(), line) == linesToDelete.end()) {
-                // If not, write the line to the new file
+            
                 outputFile << line << std::endl;
             }
         }
@@ -62,9 +68,9 @@ public:void DelTask() {
         Myfile.close();
         outputFile.close();
 
-        // Optionally, you can replace the original file with the modified one
-        std::remove("Task.txt"); // Remove the original file
-        std::rename("modified.txt", "Task.txt"); // Rename the modified file
+       
+        std::remove("Task.txt"); 
+        std::rename("modified.txt", "Task.txt"); 
     }
     else {
         std::cerr << "Error opening files!" << std::endl;
@@ -104,25 +110,33 @@ void ShowMenu() {
 int main()
 {
     int choose;
-    
-    Task myTask;
-    ShowMenu();
+    while (true) {
+        Task myTask;
+        ShowMenu();
 
-    std::cout << "Co chcesz zrobić:";
-    std::cin >> choose;
+        std::cout << "Co chcesz zrobić:";
+        if (std::cin >> choose) {
+            break;
+        }
+        else {
+            std::cout << "To nie jest liczba całkowita. Spróbuj ponownie.\n";
+            std::cin.clear(); // Czyścimy błąd strumienia.
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorujemy błędne dane do końca linii.
+        }
+        
 
-    switch (choose)
-    {
-    case 1: myTask.AddTask(); break;
-    case 2: myTask.DelTask(); break;
-    case 3: myTask.ShowTasks(); break;
-    case 4: myTask.SetTaskDone(); break;
-    case 5: return 0; break;
-    default:std::cout << "Nieprawidlowy wybor."; return 0;
-        break;
+        switch (choose)
+        {
+        case 1: myTask.AddTask(); break;
+        case 2: myTask.DelTask(); break;
+        case 3: myTask.ShowTasks(); break;
+        case 4: myTask.SetTaskDone(); break;
+        case 5: return 0; break;
+        default:std::cout << "Nieprawidlowy wybor."; return 0;
+            break;
+        }
+
     }
-
-
    
     return 0;
 }
