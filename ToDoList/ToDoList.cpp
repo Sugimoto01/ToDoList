@@ -4,7 +4,9 @@
 #include <chrono>
 #include <vector>
 #include <limits>
+#include <iomanip>
 #include <regex>
+#include <sstream>
 
 
 
@@ -13,7 +15,7 @@ const auto TimeStamp = std::chrono::system_clock::now(); // create time stamp of
 class Task {
 private:
     std::string id;
-    std::string  Name;
+    std::string Name;
     std::string DateBeg;
     std::string DateEnd;
     std::string Description;
@@ -21,42 +23,69 @@ private:
 
 
 public:
-    Task() : id(""), Name(""), DateBeg(""), DateEnd(""), Description(""), isDone(false) {}
+    Task() : id(generateUniqueId()), Name(""), DateBeg(""), DateEnd(""), Description(""), isDone(false) {}
+
+
+
+public:std::string readValidatedDate() {
+        std::string date;
+        do {
+            std::getline(std::cin, date);
+            if (checkDate(date)) {
+                break; // Data jest poprawna, wychodzimy z pętli
+            }
+            else {
+                std::cout << "Date is in invalid format please use DD-MM-YYYY format"<<std::endl;
+            }
+        } while (true);
+        return date;
+    }
+
+public: std::string generateUniqueId() {
+    auto now = std::chrono::system_clock::now();
+    auto now_c = std::chrono::system_clock::to_time_t(now);
+    auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+
+    std::stringstream ss;
+    std::tm tm_buf;
+    localtime_s(&tm_buf, &now_c); // Użyj localtime_s zamiast localtime
+    ss << std::put_time(&tm_buf, "%Y%m%d%H%M%S") << std::setfill('0') << std::setw(3) << now_ms.count();
+    return ss.str();
+}
+
+
 
 
 public: bool checkDate(const std::string& data) {
-    std::regex wzorzec("^\\d{2}-\\d{2}-\\d{4}$");
-    return std::regex_match(data, wzorzec);
+    std::regex example("^\\d{2}-\\d{2}-\\d{4}$");
+    return std::regex_match(data, example);
 }
 public: void AddTask() {
     std::ofstream MyFile("Tasks.txt", std::ios::app);
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    std::cout << "Wpisz nazwe zadania : ";
+    std::cout << "Enter task name : ";
     std::getline(std::cin, Name);
     if (!Name.empty())
     {
        
     }
-    else  std::cout << "Nazwa zadania jest niepoprawna. Spróbuj ponownie." << std::endl;
-    std::cout << "Wpisz Date rozpoczecia: : ";
-    std::getline(std::cin, DateBeg);
-    if (checkDate(DateBeg)) {
+    else  std::cout << "Task name is invalid. Please try again. " << std::endl;
 
-    }else std::cout << "Data jest w niepoprawnym formacie. Użyj formatu DD-MM-YYYY.\n";
-    std::cout << "Wpisz Date zakonczenia: : ";
-    std::getline(std::cin, DateEnd);
+    std::cout << "Enter begin date (DD-MM-YYYY): ";
+    DateBeg = readValidatedDate();
+   
     if (checkDate(DateEnd)) {
 
     }
-    else std::cout << "Data jest w niepoprawnym formacie. Użyj formatu DD-MM-YYYY.\n";
-    std::cout << "Dodaj opis zadania: ";
+    else std::cout << "Data is in wrong format please use DD-MM-YYYY format."<<std::endl;
+    std::cout << "Enter your tasks description: ";
     std::getline(std::cin, Description);
     if (!Name.empty())
     {
 
     }
-    else  std::cout << "Opis Zadania nie może być pusty" << std::endl;
+    else  std::cout << "Description can't be empty" << std::endl;
 
 
     if (MyFile.is_open()) {
@@ -69,62 +98,67 @@ public: void AddTask() {
     MyFile.close();
     }
 
-public:void DelTask() {
+      void DelTask() {
+          std::ifstream inputFile("Tasks.txt");
+          std::ofstream tempFile("Tasks_temp.txt", std::ios::app);
+          std::string idToDelete;
+          std::cout << "Enter Id of the task: ";
+          std::cin >> idToDelete;
+          std::string line;
 
-    std::ifstream Myfile("Tasks.txt");
-    std::ofstream outputFile("Modified.txt");
+          if (inputFile.is_open() && tempFile.is_open()) {
+              while (getline(inputFile, line)) {
+                  // Sprawdzanie, czy linia zawiera ID zadania do usunięcia
+                  if (line.find(idToDelete) == std::string::npos) {
+                      // Jeśli linia nie zawiera ID, kopiujemy ją do pliku tymczasowego
+                      tempFile << line << std::endl;
+                  }
+              }
+              inputFile.close();
+              tempFile.close();
 
-    if (Myfile.is_open() && outputFile.is_open()) {
-        std::vector<std::string> linesToDelete = { "Line to delete 1", "Line to delete 2" };
+              // Usuwanie oryginalnego pliku i zmiana nazwy pliku tymczasowego
+              std::remove("Tasks.txt");
+              std::rename("Tasks_temp.txt", "Tasks.txt");
+          }
+          else {
+              std::cerr << "Can't open file." << std::endl;
+          }
+      }
 
-        std::string line;
-        while (getline(Myfile, line)) {
-          
-            if (std::find(linesToDelete.begin(), linesToDelete.end(), line) == linesToDelete.end()) {
-            
-                outputFile << line << std::endl;
-            }
-        }
 
-        Myfile.close();
-        outputFile.close();
-
-       
-        std::remove("Task.txt"); 
-        std::rename("modified.txt", "Task.txt"); 
-    }
-    else {
-        std::cerr << "Error opening files!" << std::endl;
-    }
-
-}
+    
 public:void SetTaskDone() {
     isDone = true;
 }
 
 public:void ShowTasks() {
-
     std::ifstream MyFile("Tasks.txt");
-
     if (MyFile.is_open()) {
         std::string line;
         while (std::getline(MyFile, line)) {
-            std::cout << line << std::endl;
+            // ID is on firs line
+            std::istringstream iss(line);
+            std::string id, restOfLine;
+            if (std::getline(iss, id, ' ')) { // use space a separator
+                std::getline(iss, restOfLine); // rest of the line
+                std::cout << "ID: " << id << " | " << restOfLine << std::endl;
+            }
         }
     }
     else std::cerr << "Error opening file!" << std::endl;
-
     MyFile.close();
 }
+
 };
 
 
 void ShowMenu() {
-        std::cout << "1.Dodaj Zadanie"<<std::endl;
-        std::cout << "2.Usuń Zadanie" << std::endl;
-        std::cout << "3.Zobacz swoje zadania Zadanie" << std::endl;
-        std::cout << "4.Oznacz zadanie jako wykonane" << std::endl;
-        std::cout << "5.Wyjdź\n";
+        std::cout << "1.Add Task"<<std::endl;
+        std::cout << "2.Delete Task" << std::endl;
+        std::cout << "3.Show your tasks" << std::endl;
+        std::cout << "4.Mark task as completed" << std::endl;
+        std::cout << "5.Exit"<<std::endl;
 }
 
 
@@ -163,27 +197,3 @@ int main()
 }
 
 
-/*
-Napisz rozbudowaną aplikację do zarządzania listą zadań (To-Do List). Aplikacja powinna umożliwiać użytkownikowi dodawanie,
-usuwanie i oznaczanie zadań jako ukończone. Wykorzystaj klasy i struktury do reprezentowania zadań 
-oraz zastosuj operacje na plikach do zapisywania i wczytywania listy zadań.
-*/
-
-
-/*
-Uzytkownik włącza program i wybiera co chcę zrobić ze swoją listą
-
-Na początku program musi sprawdzić czy plik z listą isnieje jeżeli tak to go wczytać 
-a gdy nie ma takiego pliku to go stworzyć
-
-
-
-
-funkcja usuń zadanie będzie musiała usunąć całą linie bo na każde zadanie przysługuje 1 linia
-
-funkcja oznacz zadanie jako wykonane doda na końcu tekstu w lini ptazska
-
-
-
-
-*/
