@@ -1,12 +1,12 @@
-﻿#include <iostream>
-#include <fstream>
-#include <string>
-#include <chrono>
-#include <vector>
-#include <limits>
-#include <iomanip>
-#include <regex>
-#include <sstream>
+﻿#include <iostream> //for input and output stream operations.
+#include <fstream> //for file input/output operations.
+#include <string> //for string operations.
+#include <chrono> //for time-related operations.
+#include <vector> //for working with vectors.
+#include <limits> //for handling data type limits.
+#include <iomanip> //for stream formatting manipulations.
+#include <regex> //for regular expression operations.
+#include <sstream> //for string stream operations.
 
 
 
@@ -24,10 +24,11 @@ private:
 
 public:
     Task() : id(generateUniqueId()), Name(""), DateBeg(""), DateEnd(""), Description(""), isDone(false) {}
+         //Generates a unique identifier for the task based on the current date and time.
 
 
 
-public:std::string readValidatedDate() {
+public:std::string readValidatedDate() { //Reads and validates a date input by the user, ensuring it's in the correct format.
         std::string date;
         do {
             std::getline(std::cin, date);
@@ -196,4 +197,81 @@ int main()
     return 0;
 }
 
+/*
+* EN
+* 
+* This C++ program is designed to manage tasks within a simple task management system. It offers functionalities for adding, deleting, showing tasks, and marking tasks as completed. The program employs file I/O for persistent storage and management of tasks. Here's a technical description of its components and functionalities:
+Header Files
 
+The program includes several header files essential for its functionalities:
+
+  
+    f
+File Handling
+
+The program uses files to store task data. Standard std::ifstream and std::ofstream streams are used for file operations. 
+Tasks are saved in the "Tasks.txt" file in a format that allows easy reading and modification.
+Data Validation
+
+The program uses regular expressions to validate the format of dates entered by the user, ensuring they are in the DD-MM-YYYY format. 
+Additionally, it checks for other data validity conditions like the non-emptiness of the task name and description.
+Error Handling
+
+The program includes simple error handling mechanisms, 
+such as informing the user about a failed file opening or input in an incorrect format.
+* 
+* 
+* 
+* 
+* 
+*  PL  
+    Ten program w języku C++ służy do zarządzania zadaniami w prostym systemie zarządzania zadaniami. 
+    Program zapewnia funkcjonalności takie jak dodawanie, usuwanie, wyświetlanie zadań oraz oznaczanie zadań jako zakończone. Używa operacji na plikach do trwałego przechowywania i zarządzania zadaniami. Oto techniczny opis jego składników i funkcjonalności:
+Pliki nagłówkowe
+
+Program zawiera kilka plików nagłówkowych niezbędnych do realizacji funkcjonalności:
+
+   
+Główne składniki
+Klasa Task
+
+Reprezentuje pojedyncze zadanie z atrybutami takimi jak identyfikator, nazwa, data rozpoczęcia, 
+data zakończenia, opis i flaga oznaczająca, czy zadanie zostało zakończone.
+
+    Metody:
+        Task(): Konstruktor domyślny, który inicjalizuje zadanie z unikalnym identyfikatorem i pustymi wartościami pozostałych atrybutów.
+        generateUniqueId(): Generuje unikalny identyfikator dla zadania na podstawie bieżącej daty i czasu.
+        readValidatedDate(): Wczytuje i waliduje datę wprowadzoną przez użytkownika, upewniając się, że jest ona w odpowiednim formacie.
+        checkDate(): Sprawdza, czy podana data jest w prawidłowym formacie DD-MM-YYYY przy użyciu wyrażeń regularnych.
+        AddTask(): Pozwala użytkownikowi dodać nowe zadanie, wczytując jego szczegóły i zapisując do pliku.
+        DelTask(): Usuwa zadanie o podanym identyfikatorze, modyfikując plik z zadaniami.
+        SetTaskDone(): Oznacza zadanie jako zakończone.
+        ShowTasks(): Wyświetla listę wszystkich zadań.
+
+Funkcje pomocnicze
+
+    ShowMenu(): Wyświetla menu opcji programu.
+    main(): Główna funkcja programu, obsługuje pętlę menu i wybór opcji przez użytkownika.
+
+Obsługa plików
+
+Program używa plików do przechowywania danych o zadaniach. 
+Do operacji na plikach używane są standardowe strumienie std::ifstream i std::ofstream. 
+Zadania są zapisywane do pliku "Tasks.txt" w formacie, który umożliwia ich łatwe wczytanie i modyfikację.
+
+Walidacja danych
+
+Program wykorzystuje wyrażenia regularne do walidacji formatu dat wprowadzanych przez użytkownika, 
+zapewniając, że są one w formacie DD-MM-YYYY. Dodatkowo, sprawdzane są inne warunki poprawności danych, 
+jak niepustość nazwy zadania i opisu.
+Obsługa błędów
+
+Program zawiera proste mechanizmy obsługi błędów, 
+takie jak informowanie użytkownika o nieudanym otwarciu pliku czy wprowadzeniu danych w nieprawidłowym formacie.
+
+
+
+
+
+
+*/
